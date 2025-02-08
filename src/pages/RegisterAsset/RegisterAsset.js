@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import './RegisterUser.css';  // Certifique-se de importar o arquivo CSS
+import './RegisterAsset.css';  // Certifique-se de importar o arquivo CSS
 import '../standard.css'
 import Grid from '@mui/material/Grid2';
 
-const RegisterUser = () => {
+const RegisterAsset = () => {
     const [formData, setFormData] = useState({
         estadoCivil: '',
         genero: '',
@@ -255,4 +255,4 @@ const RegisterUser = () => {
     );
 };
 
-export default RegisterUser;
+export default RegisterAsset;
