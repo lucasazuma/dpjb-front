@@ -9,14 +9,6 @@ export const userSlice = createSlice({
             console.log(typeof action.payload)
             state.user = action.payload
             localStorage.setItem("user", JSON.stringify(action.payload));
-            // state.username = data.username
-            // if (data.role == 'elector') {
-            //     console.log("INSIDE INFOOO")
-            //     state.elector = true
-            // } else {
-            //     state.elector = false
-            // }
-            // console.log(state.username)
         }
     }
 })

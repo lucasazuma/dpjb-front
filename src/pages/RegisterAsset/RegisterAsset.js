@@ -2,36 +2,39 @@ import React, { useState } from 'react';
 import './RegisterAsset.css';  // Certifique-se de importar o arquivo CSS
 import '../standard.css'
 import Grid from '@mui/material/Grid2';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import FormControl from '@mui/material/FormControl';
 
 const RegisterAsset = () => {
     const [formData, setFormData] = useState({
-        estadoCivil: '',
-        genero: '',
-        revisores: [],
-        usuario: '',
-        aprovado: false,
-        atualizadoEm: '',
+        civil_status: '',
+        gender: '',
+        revisors: [],
+        updated_at: '',
         cpf: '',
-        criadoEm: '',
-        dataNascimento: '',
-        diploma: null,
-        foto: null,
-        nome: '',
-        nomeGuerra: '',
-        registro: '',
-        sobrenome: '',
-        telefone: '',
+        created_at: '',
+        date_of_birth: '',
+        name: '',
+        warName: '',
+        registry: '',
+        telephone: '',
     });
 
+    const names = ['revisor1', 'revisor2', 'revisor3']
+
     const handleChange = (e) => {
-        const { name, value, type, files } = e.target;
-        if (type === 'file') {
-            setFormData({ ...formData, [name]: files[0] });
-        } else if (type === 'checkbox') {
+        console.log(e.target)
+        const { name, value, type } = e.target;
+        console.log(`name: ${name} value: ${value} type: ${type}`)
+        if (type === 'checkbox') {
             setFormData({ ...formData, [name]: e.target.checked });
         } else {
+            console.log("jajjajajajajajajajaj")
             setFormData({ ...formData, [name]: value });
         }
+        console.log(formData);
     };
 
     const handleMultiSelectChange = (e) => {
@@ -51,44 +54,70 @@ const RegisterAsset = () => {
                 <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                     <Grid size={6}>
                         <div className="standard-input-group">
-                            <label>Estado Civil:</label>
-                            <input
-                                type="text"
-                                name="estadoCivil"
-                                value={formData.estadoCivil}
-                                onChange={handleChange}
-                            />
+                            <FormControl fullWidth>
+                                <InputLabel id="demo-simple-select-label">estadoCivil</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    name="civil_status"
+                                    type="text"
+                                    value={formData.civil_status}
+                                    label="estadoCivil"
+                                    onChange={handleChange}
+                                >
+                                    <MenuItem value={"casado"}>casado</MenuItem>
+                                    <MenuItem value={"solteiro"}>solteiro</MenuItem>
+                                </Select>
+                            </FormControl>
                         </div>
                     </Grid>
 
                     <Grid size={6}>
                         <div className="standard-input-group">
-                            <label>Gênero:</label>
-                            <select
-                                name="genero"
-                                value={formData.genero}
-                                onChange={handleChange}
-                            >
-                                <option value="masculino">Masculino</option>
-                                <option value="feminino">Feminino</option>
-                                <option value="indefinido">Indefinido</option>
-                            </select>
+                            <FormControl fullWidth>
+                                <InputLabel id="demo-simple-select-label">Genero</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    name="gender"
+                                    type="text"
+                                    value={formData.gender}
+                                    label="Genero"
+                                    onChange={handleChange}
+                                >
+                                    <MenuItem value={"masculino"}>masculino</MenuItem>
+                                    <MenuItem value={"feminino"}>feminino</MenuItem>
+                                    <MenuItem value={"indefinido"}>indefinido</MenuItem>
+                                </Select>
+                            </FormControl>
                         </div>
                     </Grid>
 
                     <Grid size={6}>
                         <div className="standard-input-group">
-                            <label>Revisores:</label>
-                            <select
-                                multiple
-                                name="revisores"
-                                value={formData.revisores}
-                                onChange={handleMultiSelectChange}
-                            >
-                                <option value="revisor1">Revisor 1</option>
-                                <option value="revisor2">Revisor 2</option>
-                                <option value="revisor3">Revisor 3</option>
-                            </select>
+                            <FormControl fullWidth>
+                                <InputLabel id="demo-simple-select-label">Revisores</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    name="revisors"
+                                    multiple
+                                    type="text"
+                                    value={formData.revisors}
+                                    label="Revisores"
+                                    onChange={handleChange}
+                                >
+                                    {names.map((name) => (
+                                        <MenuItem
+                                            key={name}
+                                            value={name}
+                                            
+                                        >
+                                            {name}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
                         </div>
                     </Grid>
 
@@ -105,17 +134,6 @@ const RegisterAsset = () => {
 
                     </Grid>
 
-                    <Grid size={6}>
-                        <div className="standard-input-group">
-                            <label>Aprovado:</label>
-                            <input
-                                type="checkbox"
-                                name="aprovado"
-                                checked={formData.aprovado}
-                                onChange={handleChange}
-                            />
-                        </div>
-                    </Grid>
 
                     <Grid size={6}>
                         <div className="standard-input-group">
@@ -161,30 +179,6 @@ const RegisterAsset = () => {
                                 type="date"
                                 name="dataNascimento"
                                 value={formData.dataNascimento}
-                                onChange={handleChange}
-                            />
-                        </div>
-                    </Grid>
-
-                    <Grid size={6}>
-                        <div className="standard-input-group">
-                            <label>Diploma:</label>
-                            <input
-                                type="file"
-                                name="diploma"
-                                accept="image/*"
-                                onChange={handleChange}
-                            />
-                        </div>
-                    </Grid>
-
-                    <Grid size={6}>
-                        <div className="standard-input-group">
-                            <label>Foto:</label>
-                            <input
-                                type="file"
-                                name="foto"
-                                accept="image/*"
                                 onChange={handleChange}
                             />
                         </div>

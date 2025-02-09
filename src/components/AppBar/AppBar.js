@@ -17,7 +17,9 @@ import { useSelector, useDispatch } from 'react-redux'
 
 function ResponsiveAppBar() {
   const data = useSelector(state => state.user)
+  console.log(data)
   const user = JSON.parse(data.user)
+  console.log(user)
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   let pages = []
   let links = []
