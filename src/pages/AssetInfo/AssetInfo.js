@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import './Exibicao.css';  // Certifique-se de importar o arquivo CSS
+import './AssetInfo.css';  // Certifique-se de importar o arquivo CSS
 import '../standard.css'
 import Grid from '@mui/material/Grid2';
+import { useSelector, useDispatch } from 'react-redux'
+import {api} from '../../api'
 
 const UserInfo = () => {
   const [formData, setFormData] = useState({
@@ -22,6 +24,8 @@ const UserInfo = () => {
     sobrenome: 'Silva',
     telefone: '(11) 98765-4321',
   });
+  const user = useSelector(state => state.user)
+  console.log(user)
 
   return (
     <div className="standard-container">

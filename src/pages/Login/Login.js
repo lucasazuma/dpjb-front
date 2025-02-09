@@ -1,15 +1,36 @@
 import React, { useState } from 'react';
 import './LoginPage.css'; // Import the CSS file for styling
+import { BrowserRouter as Router, useNavigate } from "react-router-dom";
+import { useDispatch } from 'react-redux'
+import { login } from '../../features/user/userSlice'
+import axios from "axios"
+
+
 
 const LoginPage = () => {
-    const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate();
+    const dispatch = useDispatch()
 
     const handleLogin = (e) => {
         e.preventDefault();
-        // Add logic for handling login here
-        console.log('Email:', email);
-        console.log('Password:', password);
+        axios.post('http://localhost:4000/query/Login', {
+            username: username,
+            password: password
+        })
+            .then(function (response) {
+                dispatch(login(response.data.data));
+                navigate("/AssetInfo");
+            })
+            .catch(function (error) {
+                console.log("HELLO FORM ERROR")
+                console.log(error);
+            })
+            .finally(function () {
+                // always executed
+            });
+
     };
 
     return (
@@ -17,11 +38,11 @@ const LoginPage = () => {
             <form onSubmit={handleLogin} className="login-form">
                 <h2>Login</h2>
                 <div className="input-group">
-                    <label>Email:</label>
+                    <label>username:</label>
                     <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        type="uUsername"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
                         required
                     />
                 </div>

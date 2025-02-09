@@ -11,12 +11,30 @@ import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from 'react-redux'
 
-const pages = ['Login', 'AddUser', 'UserInfo', 'QRcode'];
-const links = ["/", "/addUser", "/userInfo", "/QRcode"]
+
 
 function ResponsiveAppBar() {
+  const data = useSelector(state => state.user)
+  const user = JSON.parse(data.user)
   const [anchorElNav, setAnchorElNav] = React.useState(null);
+  let pages = []
+  let links = []
+  console.log(user.role)
+  if (user) {
+    if (user.role === "elector") {
+      pages = ['Login', 'RegisterAsset', 'UpdateAsset', 'Requests'];
+      links = ["/", "/RegisterAsset", '/UpdateAsset', '/Requests']
+    } else {
+      pages = ['Login', 'AssetInfo', 'QRcode'];
+      links = ["/", "/AssetInfo", "/QRcode"]
+    }
+  } else {
+    pages = ['Login',];
+    links = ["/"]
+  }
+
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -77,7 +95,7 @@ function ResponsiveAppBar() {
             >
               {pages.map((page, index) => (
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
-                    <Link to={links[index]}>{page}</Link>
+                  <Link to={links[index]}>{page}</Link>
                 </MenuItem>
               ))}
             </Menu>
