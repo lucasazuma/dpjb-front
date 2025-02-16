@@ -3,7 +3,7 @@ import './LoginPage.css'; // Import the CSS file for styling
 import { BrowserRouter as Router, useNavigate } from "react-router-dom";
 import { useDispatch } from 'react-redux'
 import { login } from '../../features/user/userSlice'
-import axios from "axios"
+import api from '../../api'
 
 
 
@@ -15,7 +15,7 @@ const LoginPage = () => {
 
     const handleLogin = (e) => {
         e.preventDefault();
-        axios.post('http://localhost:4000/query/Login', {
+        api.post('/query/Login', {
             username: username,
             password: password
         })
