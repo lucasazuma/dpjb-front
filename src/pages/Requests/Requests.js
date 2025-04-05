@@ -8,8 +8,10 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward';
+import { useNavigate } from "react-router-dom";
 
 const RegisterAsset = () => {
+    const navigate = useNavigate();
     
     function createData(name, username, war_name, created_at, approved_by) {
         return { name, username, war_name, created_at, approved_by };
@@ -48,7 +50,7 @@ const RegisterAsset = () => {
                             <TableCell align="center">{row.war_name}</TableCell>
                             <TableCell align="center">{row.created_at}</TableCell>
                             <TableCell align="center">{row.approved_by}</TableCell>
-                            <TableCell align="center"><ArrowOutwardIcon/></TableCell>
+                            <TableCell align="center"><ArrowOutwardIcon onClick={() => navigate("/ApproveRequest")}/></TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

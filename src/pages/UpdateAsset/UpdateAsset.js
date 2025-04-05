@@ -2,25 +2,27 @@ import React, { useState } from 'react';
 import './UpdateAsset.css';  // Certifique-se de importar o arquivo CSS
 import '../standard.css'
 import Grid from '@mui/material/Grid2';
+import { electorUser } from '../../utils/mock';
 
 const UpdateAsset = () => {
+    const mockData = electorUser();
     const [formData, setFormData] = useState({
-        estadoCivil: '',
-        genero: '',
-        revisores: [],
-        usuario: '',
-        aprovado: false,
-        atualizadoEm: '',
-        cpf: '',
-        criadoEm: '',
-        dataNascimento: '',
+        estadoCivil: mockData.civilStatus,
+        genero: mockData.gender,
+        revisores: mockData.revisors,
+        usuario: mockData.username,
+        aprovado: mockData.approved,
+        atualizadoEm: mockData.updatedAt,
+        cpf: mockData.cpf,
+        criadoEm: mockData.createdAt,
+        dataNascimento: mockData.dateOfBirth,
         diploma: null,
         foto: null,
-        nome: '',
-        nomeGuerra: '',
-        registro: '',
-        sobrenome: '',
-        telefone: '',
+        nome: mockData.name,
+        nomeGuerra: mockData.nameWar,
+        registro: mockData.registry,
+        sobrenome: mockData.lastName,
+        telefone: mockData.telephone,
     });
 
     const handleChange = (e) => {

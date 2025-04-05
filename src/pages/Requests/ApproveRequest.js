@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import './AssetInfo.css';  // Certifique-se de importar o arquivo CSS
+import '../../stylesheets/AssetInfo.css';  // Certifique-se de importar o arquivo CSS
 import '../standard.css'
 import Grid from '@mui/material/Grid2';
 import { useSelector, useDispatch } from 'react-redux'
 import api from '../../api'
 import { electorUser } from '../../utils/mock'
 
-const UserInfo = () => {
+const ApproveRequest = () => {
   const data = electorUser();
 
   return (
@@ -111,10 +111,16 @@ const UserInfo = () => {
               </div>
             </Grid>
           </Grid>
+          <div>
+            <button style={{ backgroundColor: 'green', borderRadius: '10px' }}>Aprovar</button>
+          </div>
+          <div>
+            <button style={{ backgroundColor: 'red', borderRadius: '10px' }}>Reprovar</button>
+          </div>
         </div>
       </div>
     </>
   );
 };
 
-export default UserInfo;
+export default ApproveRequest;
