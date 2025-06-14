@@ -4,38 +4,28 @@ import { BrowserRouter as Router, useNavigate } from "react-router-dom";
 import { useDispatch } from 'react-redux'
 import { login } from '../../features/user/userSlice'
 import api from '../../api'
+import { useAuth } from '../../context/auth-context';
 
 
 
 const LoginPage = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const { login } = useAuth();
     const navigate = useNavigate();
     const dispatch = useDispatch()
 
-    const handleLogin = (e) => {
-        e.preventDefault();
-        api.post('/query/Login', {
-            username: username,
-            password: password
-        })
-            .then(function (response) {
-                dispatch(login(response.data.data));
-                navigate("/AssetInfo");
-            })
-            .catch(function (error) {
-                console.log("HELLO FORM ERROR")
-                console.log(error);
-            })
-            .finally(function () {
-                // always executed
-            });
+    const handleLogin = async () => {
+        const success = await login(username, password);
+        if (success) {
+          navigate("/AssetInfo");
+        }
 
     };
 
     return (
         <div className="login-container">
-            <form onSubmit={handleLogin} className="login-form">
+            <form className="login-form"> 
                 <h2>Login</h2>
                 <div className="input-group">
                     <label>username:</label>
@@ -55,7 +45,7 @@ const LoginPage = () => {
                         required
                     />
                 </div>
-                <button type="submit">Login</button>
+                <button onClick={() => handleLogin()}>Login</button>
             </form>
         </div>
     );

@@ -12,18 +12,15 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux'
+import { useAuth } from '../../context/auth-context';
 
 
 
 function ResponsiveAppBar() {
-  const data = useSelector(state => state.user)
-  console.log(data)
-  const user = JSON.parse(data.user)
-  console.log(user)
+  const { user } = useAuth();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   let pages = []
   let links = []
-  console.log(user.role)
   if (user) {
     if (user.role === "elector") {
       pages = ['Login', 'RegisterAsset', 'UpdateAsset', 'Requests'];
