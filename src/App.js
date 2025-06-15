@@ -24,7 +24,7 @@ export default function App() {
           <Route path="/QRcode" element={<QRcode />} />
           <Route path="/UpdateAsset" element={<UpdateAsset />} />
           <Route path="/Requests" element={<Requests />} />
-          <Route path="/ApproveRequest" element={<ApproveRequest />} />
+          <Route path="/ApproveRequest/:id" element={<ApproveRequest />} />
         </Routes>
       </Router>
     </AuthProvider>

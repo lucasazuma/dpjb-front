@@ -1,62 +1,70 @@
-import React, { useState } from 'react';
-import '../standard.css'
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward';
+import React, { useState, useEffect } from "react";
+import "../standard.css";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
 import { useNavigate } from "react-router-dom";
+import api from "../../api";
+import { useParams } from "react-router-dom";
 
 const RegisterAsset = () => {
-    const navigate = useNavigate();
-    
-    function createData(name, username, war_name, created_at, approved_by) {
-        return { name, username, war_name, created_at, approved_by };
-    }
+  const navigate = useNavigate();
+  const [rows, setRows] = useState([]);
 
-    const rows = [
-        createData('Journalist1', "jor1", "jor1", "26/09/1999", 2),
-        createData('Journalist1', "jor1", "jor1", "26/09/1999", 37),
-        createData('Journalist1', "jor1","jor1", "26/09/1999", 24),
-        createData('Journalist1', "jor1","jor1", "26/09/1999", 67),
-        createData('Journalist1', "jor1","jor1", "26/09/1999", 49),
-    ];
+  useEffect(() => {
+    const fetchJournalists = async () => {
+      try {
+        const response = await api.get("/api/internal/getAllProposals");
+        const data = JSON.parse(response.data?.data);
+        setRows(data);
+      } catch (err) {
+        console.error("Failed to fetch journalists:", err);
+      }
+    };
 
-    return (
-        <TableContainer component={Paper}>
-            <Table aria-label="simple table">
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Nome</TableCell>
-                        <TableCell align="center">Nome de usuário</TableCell>
-                        <TableCell align="center">Nome de guerra</TableCell>
-                        <TableCell align="center">Creado em</TableCell>
-                        <TableCell align="center">Aprovado por</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {rows.map((row) => (
-                        <TableRow
-                            key={row.name}
-                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                        >
-                            <TableCell component="th" scope="row">
-                                {row.name}
-                            </TableCell>
-                            <TableCell align="center">{row.username}</TableCell>
-                            <TableCell align="center">{row.war_name}</TableCell>
-                            <TableCell align="center">{row.created_at}</TableCell>
-                            <TableCell align="center">{row.approved_by}</TableCell>
-                            <TableCell align="center"><ArrowOutwardIcon onClick={() => navigate("/ApproveRequest")}/></TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-        </TableContainer>
-    );
+    fetchJournalists();
+  }, []);
+
+
+  return (
+    <TableContainer component={Paper}>
+      <Table aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell>Nome</TableCell>
+            <TableCell align="center">Email</TableCell>
+            <TableCell align="center">Nome de guerra</TableCell>
+            <TableCell align="center">Creado em</TableCell>
+            <TableCell align="center">Aprovado por</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {rows?.map((row) => (
+            <TableRow
+              key={row.name}
+              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+            >
+              <TableCell component="th" scope="row">
+                {row.name}
+              </TableCell>
+              <TableCell align="center">{row.email}</TableCell>
+              <TableCell align="center">{row.warName}</TableCell>
+              <TableCell align="center">{row.createdAt}</TableCell>
+              <TableCell align="center">{row.revisors?.join(", ")}</TableCell>
+              <TableCell align="center">
+                <ArrowOutwardIcon onClick={() => navigate(`/ApproveRequest/${row.id}`)} />
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
 };
 
 export default RegisterAsset;
