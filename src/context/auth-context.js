@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
+import api from "../api";
 
 const AuthContext = createContext();
 
@@ -8,6 +9,7 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
+    console.log("stored user", storedUser);
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
@@ -15,11 +17,22 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (email, password) => {
-    const fakeUser = { id: "1", email, name: "John Doe", role: "regular" };
-    localStorage.setItem("user", JSON.stringify(fakeUser));
-    setUser(fakeUser);
-    return true
-
+    try {
+      const response = await api.post("/api/orjp/loginJournalist", {
+        username: email,
+        password: password,
+      });
+      if (response && response.status === 200) {
+        localStorage.setItem("user", response.data.data); // stringify here!
+        setUser(response.data.data);
+        return true;
+      } else {
+        throw new Error("Usario ou senha incorretos");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      throw error;
+    }
   };
 
   const logout = () => {

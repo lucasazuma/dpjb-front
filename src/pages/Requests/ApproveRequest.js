@@ -1,121 +1,154 @@
-import React, { useState, useEffect } from 'react';
-import '../../stylesheets/AssetInfo.css';  // Certifique-se de importar o arquivo CSS
-import '../standard.css'
-import Grid from '@mui/material/Grid2';
-import { useSelector, useDispatch } from 'react-redux'
-import api from '../../api'
-import { electorUser } from '../../utils/mock'
+import React, { useState, useEffect } from "react";
+import "../../stylesheets/AssetInfo.css"; // Certifique-se de importar o arquivo CSS
+import "../standard.css";
+import Grid from "@mui/material/Grid2";
+import api from "../../api";
+import { useParams } from "react-router-dom";
+import { useAuth } from "../../context/auth-context";
+import { useNavigate } from "react-router-dom";
 
 const ApproveRequest = () => {
-  const data = electorUser();
+  const { id } = useParams();
+  const [proposal, setProposal] = useState({});
+  const { user } = useAuth();
+    const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchJournalists = async () => {
+      try {
+        const response = await api.get(`/api/internal/getProposal/${id}`);
+        setProposal(JSON.parse(response.data?.data));
+      } catch (err) {
+        console.error("Failed to fetch journalists:", err);
+      }
+    };
+
+    fetchJournalists();
+  }, []);
+
+  const handleApproval = async () => {
+    console.log("handle approval")
+    try {
+      const response = await api.post("/api/internal/approveProposal", {
+        id: id,
+        approved: true,
+        revisor: user.name
+      });
+      if (response && response.status === 200) {
+        navigate(`/Requests`)
+        alert("approved")
+      } else {
+        throw new Error("Não foi possivel aprovar");
+      }
+    } catch (error) {
+      console.error("Não foi possivle aprovar", error);
+      throw new Error("Não foi possivel aprovar");
+    }
+  };
 
   return (
     <>
       <div className="standard-container">
         <div className="standard-form-container">
           <h2>Dados Cadastrados</h2>
-          <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+          <Grid
+            container
+            rowSpacing={1}
+            columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+          >
             <Grid size={6}>
               <div className="standard-input-group">
-                <label>Estado Civil:</label> {data.civilStatus}
+                <label>Estado Civil:</label> {proposal.civilStatus}
               </div>
             </Grid>
 
             <Grid size={6}>
               <div className="standard-input-group">
-                <label>Gênero:</label> {data.gender}
+                <label>Gênero:</label> {proposal.gender}
               </div>
             </Grid>
 
             <Grid size={6}>
               <div className="standard-input-group">
-                <label>Revisores:</label> {data.revisors.join(', ')}
+                <label>Revisores:</label> {proposal.revisors?.join(", ")}
               </div>
             </Grid>
 
             <Grid size={6}>
               <div className="standard-input-group">
-                <label>Usuário:</label> {data.username}
+                <label>Usuário:</label> {proposal.username}
               </div>
             </Grid>
 
             <Grid size={6}>
               <div className="standard-input-group">
-                <label>Aprovado:</label> {data.approved ? 'Sim' : 'Não'}
+                <label>Aprovado:</label> {proposal.approved ? "Sim" : "Não"}
               </div>
             </Grid>
 
             <Grid size={6}>
               <div className="standard-input-group">
-                <label>Atualizado em:</label> {data.updatedAt}
+                <label>Atualizado em:</label> {proposal.updatedAt}
               </div>
             </Grid>
 
             <Grid size={6}>
               <div className="standard-input-group">
-                <label>CPF:</label> {data.cpf}
+                <label>CPF:</label> {proposal.cpf}
               </div>
             </Grid>
 
             <Grid size={6}>
               <div className="standard-input-group">
-                <label>Criado em:</label> {data.createdAt}
+                <label>Criado em:</label> {proposal.createdAt}
               </div>
             </Grid>
 
             <Grid size={6}>
               <div className="standard-input-group">
-                <label>Data de Nascimento:</label> {data.dateOfBirth}
+                <label>Data de Nascimento:</label> {proposal.dateOfBirth}
               </div>
             </Grid>
 
             <Grid size={6}>
               <div className="standard-input-group">
-                <label>Diploma:</label> <img src={data.diplome} alt="Diploma" className="imagem" />
+                <label>Nome:</label> {proposal.name}
               </div>
             </Grid>
 
             <Grid size={6}>
               <div className="standard-input-group">
-                <label>Foto:</label> <img src={data.photo} alt="Foto" className="imagem" />
+                <label>Nome de Guerra:</label> {proposal.warName}
               </div>
             </Grid>
 
             <Grid size={6}>
               <div className="standard-input-group">
-                <label>Nome:</label> {data.name}
+                <label>Registro:</label> {proposal.registry}
               </div>
             </Grid>
 
             <Grid size={6}>
               <div className="standard-input-group">
-                <label>Nome de Guerra:</label> {data.warName}
+                <label>Email:</label> {proposal.email}
               </div>
             </Grid>
 
             <Grid size={6}>
               <div className="standard-input-group">
-                <label>Registro:</label> {data.registry}
-              </div>
-            </Grid>
-
-            <Grid size={6}>
-              <div className="standard-input-group">
-                <label>Email:</label> {data.email}
-              </div>
-            </Grid>
-
-            <Grid size={6}>
-              <div className="standard-input-group">
-                <label>Telefone:</label> {data.telephone}
+                <label>Telefone:</label> {proposal.telephone}
               </div>
             </Grid>
           </Grid>
           <div>
-            <button style={{ backgroundColor: 'green', borderRadius: '10px' }}>Aprovar</button>
+            <button style={{ backgroundColor: "green", borderRadius: "10px" }} onClick={() => handleApproval()}>
+              Aprovar
+            </button>
           </div>
           <div>
-            <button style={{ backgroundColor: 'red', borderRadius: '10px' }}>Reprovar</button>
+            <button style={{ backgroundColor: "red", borderRadius: "10px" }}>
+              Reprovar
+            </button>
           </div>
         </div>
       </div>
