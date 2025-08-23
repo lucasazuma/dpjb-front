@@ -5,6 +5,7 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null)
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -18,12 +19,16 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
+      console.log("hello from login function")
       const response = await api.post("/api/orjp/loginJournalist", {
         username: email,
         password: password,
       });
+      console.log("after login request", response)
       if (response && response.status === 200) {
-        localStorage.setItem("user", response.data.data); // stringify here!
+        localStorage.setItem("user", response.data.data); 
+        localStorage.setItem("token", response.data.token);
+        setToken(response.data.token)
         setUser(response.data.data);
         return true;
       } else {
@@ -41,7 +46,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, logout, token }}>
       {children}
     </AuthContext.Provider>
   );

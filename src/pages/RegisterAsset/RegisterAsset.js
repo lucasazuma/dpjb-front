@@ -6,6 +6,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
+import api from "../../api";
 
 const RegisterAsset = () => {
     const [formData, setFormData] = useState({
@@ -20,6 +21,7 @@ const RegisterAsset = () => {
         warName: '',
         registry: '',
         telephone: '',
+        email: '',
     });
 
     const names = ['revisor1', 'revisor2', 'revisor3']
@@ -42,9 +44,23 @@ const RegisterAsset = () => {
         setFormData({ ...formData, revisores: options });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(formData);
+        console.log("hello hahahahahah")
+        try {
+            const response = await api.post("/api/internal/createProposal", {
+                formData    
+            });
+            console.log("hello response => ", response)
+            if (response && response.status === 200) {
+                console.log("hello success")
+                return true;
+            } else {
+                console.log("batata error")
+            }
+        } catch (err) {
+            console.error("Failed to fetch journalists:", err);
+        }
     };
 
     return (
@@ -111,7 +127,7 @@ const RegisterAsset = () => {
                                         <MenuItem
                                             key={name}
                                             value={name}
-                                            
+
                                         >
                                             {name}
                                         </MenuItem>
@@ -121,18 +137,6 @@ const RegisterAsset = () => {
                         </div>
                     </Grid>
 
-                    <Grid size={6}>
-                        <div className="standard-input-group">
-                            <label>Usuário:</label>
-                            <input
-                                type="text"
-                                name="usuario"
-                                value={formData.usuario}
-                                onChange={handleChange}
-                            />
-                        </div>
-
-                    </Grid>
 
 
                     <Grid size={6}>
@@ -140,8 +144,8 @@ const RegisterAsset = () => {
                             <label>Atualizado em:</label>
                             <input
                                 type="date"
-                                name="atualizadoEm"
-                                value={formData.atualizadoEm}
+                                name="updated_at"
+                                value={formData.updated_at}
                                 onChange={handleChange}
                             />
                         </div>
@@ -165,8 +169,8 @@ const RegisterAsset = () => {
                             <label>Criado em:</label>
                             <input
                                 type="date"
-                                name="criadoEm"
-                                value={formData.criadoEm}
+                                name="created_at"
+                                value={formData.created_at}
                                 onChange={handleChange}
                             />
                         </div>
@@ -177,8 +181,8 @@ const RegisterAsset = () => {
                             <label>Data de Nascimento:</label>
                             <input
                                 type="date"
-                                name="dataNascimento"
-                                value={formData.dataNascimento}
+                                name="date_of_birth"
+                                value={formData.date_of_birth}
                                 onChange={handleChange}
                             />
                         </div>
@@ -189,8 +193,8 @@ const RegisterAsset = () => {
                             <label>Nome:</label>
                             <input
                                 type="text"
-                                name="nome"
-                                value={formData.nome}
+                                name="name"
+                                value={formData.name}
                                 onChange={handleChange}
                             />
                         </div>
@@ -201,8 +205,8 @@ const RegisterAsset = () => {
                             <label>Nome de Guerra:</label>
                             <input
                                 type="text"
-                                name="nomeGuerra"
-                                value={formData.nomeGuerra}
+                                name="warName"
+                                value={formData.warName}
                                 onChange={handleChange}
                             />
                         </div>
@@ -212,32 +216,33 @@ const RegisterAsset = () => {
                             <label>Registro:</label>
                             <input
                                 type="text"
-                                name="registro"
-                                value={formData.registro}
+                                name="registry"
+                                value={formData.registry}
                                 onChange={handleChange}
                             />
                         </div>
                     </Grid>
 
-                    <Grid size={6}>
-                        <div className="standard-input-group">
-                            <label>Sobrenome:</label>
-                            <input
-                                type="text"
-                                name="sobrenome"
-                                value={formData.sobrenome}
-                                onChange={handleChange}
-                            />
-                        </div>
-                    </Grid>
 
                     <Grid size={6}>
                         <div className="standard-input-group">
                             <label>Telefone:</label>
                             <input
                                 type="text"
-                                name="telefone"
-                                value={formData.telefone}
+                                name="telephone"
+                                value={formData.telephone}
+                                onChange={handleChange}
+                            />
+                        </div>
+                    </Grid>
+
+                    <Grid size={6}>
+                        <div className="standard-input-group">
+                            <label>Email:</label>
+                            <input
+                                type="text"
+                                name="email"
+                                value={formData.email}
                                 onChange={handleChange}
                             />
                         </div>

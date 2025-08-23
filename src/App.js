@@ -8,6 +8,7 @@ import QRcode from "./pages/QRcode/QRcode";
 import UpdateAsset from "./pages/UpdateAsset/UpdateAsset";
 import Requests from "./pages/Requests/Requests";
 import ApproveRequest from "./pages/Requests/ApproveRequest";
+import CreateAsset from "./pages/CreateAsset/CreateAsset";
 import { AuthProvider } from "./context/auth-context"; // 👈 import the context
 
 export default function App() {
@@ -25,6 +26,7 @@ export default function App() {
           <Route path="/UpdateAsset" element={<UpdateAsset />} />
           <Route path="/Requests" element={<Requests />} />
           <Route path="/ApproveRequest/:id" element={<ApproveRequest />} />
+          <Route path="/CreateAsset/:id" element={<CreateAsset />} />
         </Routes>
       </Router>
     </AuthProvider>

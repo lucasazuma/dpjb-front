@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./LoginPage.css"; // Import the CSS file for styling
 import { BrowserRouter as Router, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/auth-context";
+import api from "../../api";
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");
@@ -23,14 +24,25 @@ const LoginPage = () => {
       });
   };
 
+  const handleElection = async () => {
+    console.log("hello from handle election")
+    try {
+        const response = await api.get(`/api/orjp/election`);
+        console.log("response => ", response)
+      } catch (err) {
+        console.error("Failed to fetch journalists:", err);
+      }
+  }
+
   return (
     <div className="login-container">
       <form className="login-form">
+        <button onClick={handleElection}>handle election</button>
         <h2>Login</h2>
         <div className="input-group">
           <label>username:</label>
           <input
-            type="uUsername"
+            type="Username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required

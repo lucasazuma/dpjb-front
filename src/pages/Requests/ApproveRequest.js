@@ -27,7 +27,6 @@ const ApproveRequest = () => {
   }, []);
 
   const handleApproval = async () => {
-    console.log("handle approval")
     try {
       const response = await api.post("/api/internal/approveProposal", {
         id: id,
@@ -42,9 +41,25 @@ const ApproveRequest = () => {
       }
     } catch (error) {
       console.error("Não foi possivle aprovar", error);
-      throw new Error("Não foi possivel aprovar");
     }
   };
+
+  const handleRejection = async () => {
+    try {
+      const response = await api.post("/api/internal/deleteProposal", {
+        id: proposal.id,
+      });
+      if (response && response.status === 200) {
+        navigate(`/Requests`)
+        alert("deleted")
+      } else {
+        throw new Error("Não foi possivel reporvar");
+      }
+    } catch (error) {
+      console.error("Não foi possivle reprovar", error);
+      throw new Error("Não foi possivel reprovar");
+    }
+  }
 
   return (
     <>
@@ -146,7 +161,7 @@ const ApproveRequest = () => {
             </button>
           </div>
           <div>
-            <button style={{ backgroundColor: "red", borderRadius: "10px" }}>
+            <button style={{ backgroundColor: "red", borderRadius: "10px" }} onClick={() => handleRejection()}>
               Reprovar
             </button>
           </div>
