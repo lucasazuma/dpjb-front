@@ -11,7 +11,7 @@ const QRcode = () => {
             <div className='standard-container'>
                 <div className='standard-form-container'>
                     <h1>QR Code Generator</h1>
-                    <QRCode value={user.name} />
+                    {user && <QRCode value={user.name} />}
                 </div>
 
             </div>

@@ -28,6 +28,7 @@ const ApproveRequest = () => {
 
   const handleApproval = async () => {
     try {
+      console.log("hello ")
       const response = await api.post("/api/internal/approveProposal", {
         id: id,
         approved: true,

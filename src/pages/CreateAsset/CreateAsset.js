@@ -10,6 +10,7 @@ const CreateAsset = () => {
     const [password, setPassword] = useState("");
     const [proposal, setProposal] = useState({})
     const { id } = useParams();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchJournalists = async () => {
@@ -29,7 +30,7 @@ const CreateAsset = () => {
         try {
             console.log("hanlde submit #####")
             let data = JSON.parse(proposal)
-            await api.post(`/api/orjp/createJournalist`, {
+            let response = await api.post(`/api/internal/createProposal`, {
                 name: data.name,
                 warName: data.warName,
                 telephone: data.telephone,
@@ -46,10 +47,15 @@ const CreateAsset = () => {
                 registry: data.registry,
                 role: "normal"
             });
+            if (response && response.status === 200) {
+                navigate(`/Requests`)
+                alert("Criado com sucesso")
+            } else {
+                throw new Error("Não foi possivel aprovar");
+            }
         } catch (err) {
             console.error("Failed to fetch journalists:", err);
         }
-
     }
 
     return (
@@ -75,7 +81,7 @@ const CreateAsset = () => {
                     />
                 </div>
                 <button type="button" onClick={handleSubmit}>
-                    Login
+                    Cadastrar
                 </button>
             </form>
         </div>

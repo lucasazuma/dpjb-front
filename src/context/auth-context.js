@@ -29,7 +29,7 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem("user", response.data.data); 
         localStorage.setItem("token", response.data.token);
         setToken(response.data.token)
-        setUser(response.data.data);
+        setUser(JSON.parse(response.data.data));
         return true;
       } else {
         throw new Error("Usario ou senha incorretos");

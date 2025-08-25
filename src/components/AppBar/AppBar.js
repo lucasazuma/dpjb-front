@@ -22,11 +22,14 @@ function ResponsiveAppBar() {
   let pages = []
   let links = []
   if (user) {
+    console.log("user -----------------", user)
     if (user.role === "elector") {
-      pages = ['Login', 'RegisterAsset', 'UpdateAsset', 'Requests'];
-      links = ["/", "/RegisterAsset", '/UpdateAsset', '/Requests']
+      console.log("elector")
+      pages = ['Login', 'Registrar Pedido', 'Pedidos', 'QRcode', 'Informação do usuário'];
+      links = ["/", "/RegisterAsset", '/Requests', '/QRcode', "/AssetInfo"]
     } else {
-      pages = ['Login', 'AssetInfo', 'QRcode'];
+      console.log("normal")
+      pages = ['Login', 'Informação do usuário', 'QRcode'];
       links = ["/", "/AssetInfo", "/QRcode"]
     }
   } else {

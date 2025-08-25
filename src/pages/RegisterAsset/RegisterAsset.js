@@ -7,6 +7,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
 import api from "../../api";
+import { useNavigate } from "react-router-dom";
 
 const RegisterAsset = () => {
     const [formData, setFormData] = useState({
@@ -24,19 +25,15 @@ const RegisterAsset = () => {
         email: '',
     });
 
-    const names = ['revisor1', 'revisor2', 'revisor3']
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
-        console.log(e.target)
         const { name, value, type } = e.target;
-        console.log(`name: ${name} value: ${value} type: ${type}`)
         if (type === 'checkbox') {
             setFormData({ ...formData, [name]: e.target.checked });
         } else {
-            console.log("jajjajajajajajajajaj")
             setFormData({ ...formData, [name]: value });
         }
-        console.log(formData);
     };
 
     const handleMultiSelectChange = (e) => {
@@ -46,17 +43,15 @@ const RegisterAsset = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("hello hahahahahah")
         try {
             const response = await api.post("/api/internal/createProposal", {
-                formData    
+                formData
             });
-            console.log("hello response => ", response)
             if (response && response.status === 200) {
-                console.log("hello success")
-                return true;
+                navigate(`/Requests`)
+                alert("Pedido registrado com sucesso")
             } else {
-                console.log("batata error")
+                throw new Error("Não foi possivel registrar o pedido");
             }
         } catch (err) {
             console.error("Failed to fetch journalists:", err);
@@ -108,36 +103,6 @@ const RegisterAsset = () => {
                             </FormControl>
                         </div>
                     </Grid>
-
-                    <Grid size={6}>
-                        <div className="standard-input-group">
-                            <FormControl fullWidth>
-                                <InputLabel id="demo-simple-select-label">Revisores</InputLabel>
-                                <Select
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    name="revisors"
-                                    multiple
-                                    type="text"
-                                    value={formData.revisors}
-                                    label="Revisores"
-                                    onChange={handleChange}
-                                >
-                                    {names.map((name) => (
-                                        <MenuItem
-                                            key={name}
-                                            value={name}
-
-                                        >
-                                            {name}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                        </div>
-                    </Grid>
-
-
 
                     <Grid size={6}>
                         <div className="standard-input-group">
