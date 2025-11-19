@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import "../../stylesheets/AssetInfo.css"; // Certifique-se de importar o arquivo CSS
 import "../standard.css";
 import Grid from "@mui/material/Grid2";
 import api from "../../api";
@@ -34,7 +33,7 @@ const ApproveRequest = () => {
       const response = await api.post("/api/internal/approveProposal", {
         id: id,
         approved: true,
-        revisor: user.name
+        revisor: user.username
       });
       if (response && response.status === 200) {
         navigate(`/Requests`)

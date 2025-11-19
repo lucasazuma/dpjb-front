@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import "../Login/LoginPage.css"; // Import the CSS file for styling
-import { BrowserRouter as Router, useNavigate } from "react-router-dom";
+import "../standard.css"; // Import standard CSS
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/auth-context";
 import api from "../../api";
 import { useParams } from "react-router-dom";
@@ -9,6 +9,7 @@ const CreateAsset = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [proposal, setProposal] = useState({})
+    const [termsAccepted, setTermsAccepted] = useState(false);
     const { id } = useParams();
     const navigate = useNavigate();
 
@@ -29,7 +30,7 @@ const CreateAsset = () => {
     const handleSubmit = async () => {
         try {
             let data = JSON.parse(proposal)
-            let response = await api.post(`/api/internal/createProposal`, {
+            let response = await api.post(`/api/orjp/createJournalist`, {
                 name: data.name,
                 warName: data.warName,
                 telephone: data.telephone,
@@ -79,7 +80,22 @@ const CreateAsset = () => {
                         required
                     />
                 </div>
-                <button type="button" onClick={handleSubmit}>
+                <div className="input-group">
+                    <div className="checkbox-group">
+                        <input
+                            type="checkbox"
+                            id="terms"
+                            checked={termsAccepted}
+                            onChange={(e) => setTermsAccepted(e.target.checked)}
+                            required
+                            style={{ marginRight: '8px' }}
+                        />
+                        <label htmlFor="terms" style={{ textAlign: 'left', margin: 0 }}>
+                            Eu concordo com os termos de uso e políticas de privacidade
+                        </label>
+                    </div>
+                </div>
+                <button type="button" onClick={handleSubmit} disabled={!termsAccepted}>
                     Cadastrar
                 </button>
             </form>

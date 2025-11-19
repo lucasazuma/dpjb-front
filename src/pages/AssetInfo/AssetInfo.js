@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import './AssetInfo.css';  // Certifique-se de importar o arquivo CSS
 import '../standard.css'
 import Grid from '@mui/material/Grid2';
 import { useSelector, useDispatch } from 'react-redux'

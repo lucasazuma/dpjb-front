@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import './RegisterAsset.css';  // Certifique-se de importar o arquivo CSS
 import '../standard.css'
 import Grid from '@mui/material/Grid2';
 import InputLabel from '@mui/material/InputLabel';
