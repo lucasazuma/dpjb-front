@@ -23,6 +23,10 @@ const RegisterAsset = () => {
         registry: '',
         telephone: '',
         email: '',
+        operation: "Create",
+        reason: '',
+        username: "",
+        userId: "",
     });
 
     const navigate = useNavigate();

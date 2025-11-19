@@ -1,260 +1,267 @@
-import React, { useState } from 'react';
-import './UpdateAsset.css';  // Certifique-se de importar o arquivo CSS
-import '../standard.css'
+import React, { useState, useEffect } from 'react';
+import './UpdateAsset.css';
+import '../standard.css';
 import Grid from '@mui/material/Grid2';
 import { electorUser } from '../../utils/mock';
+import { useParams, useNavigate } from "react-router-dom";
+import api from "../../api";
 
 const UpdateAsset = () => {
-    const mockData = electorUser();
-    const [formData, setFormData] = useState({
-        estadoCivil: mockData.civilStatus,
-        genero: mockData.gender,
-        revisores: mockData.revisors,
-        usuario: mockData.username,
-        aprovado: mockData.approved,
-        atualizadoEm: mockData.updatedAt,
-        cpf: mockData.cpf,
-        criadoEm: mockData.createdAt,
-        dataNascimento: mockData.dateOfBirth,
-        diploma: null,
-        foto: null,
-        nome: mockData.name,
-        nomeGuerra: mockData.nameWar,
-        registro: mockData.registry,
-        sobrenome: mockData.lastName,
-        telefone: mockData.telephone,
-    });
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    civilStatus: '',
+    gender: '',
+    revisors: [],
+    username: '',
+    approved: false,
+    updatedAt: '',
+    cpf: '',
+    createdAt: '',
+    dateOfBirth: '',
+    diploma: null,
+    photo: null,
+    name: '',
+    warName: '',
+    registry: '',
+    lastName: '',
+    telephone: '',
+    operation: "Update",
+    reason: "",
+    username: "",
+    userId: "",
+  });
+  console.log(formData)
 
-    const handleChange = (e) => {
-        const { name, value, type, files } = e.target;
-        if (type === 'file') {
-            setFormData({ ...formData, [name]: files[0] });
-        } else if (type === 'checkbox') {
-            setFormData({ ...formData, [name]: e.target.checked });
-        } else {
-            setFormData({ ...formData, [name]: value });
-        }
+  useEffect(() => {
+    const fetchJournalists = async () => {
+      try {
+        const response = await api.get(`/api/orjp/getJournalist/${id}`);
+        const data = JSON.parse(response.data.data);
+        setFormData({
+          civilStatus: data.civilStatus || '',
+          gender: data.gender || '',
+          revisors: [],
+          updatedAt: data.updatedAt || '',
+          cpf: data.cpf || '',
+          createdAt: data.createdAt || '',
+          dateOfBirth: data.dateOfBirth || '',
+          name: data.name || '',
+          warName: data.warName || '',
+          registry: data.registry || '',
+          telephone: data.telephone || '',
+          email: data.email || '',
+          operation: "Update",
+          reason: "",
+          username: data.username || '',
+          userId: data.id || '',
+        });
+      } catch (err) {
+      }
     };
 
-    const handleMultiSelectChange = (e) => {
-        const options = Array.from(e.target.selectedOptions, option => option.value);
-        setFormData({ ...formData, revisores: options });
-    };
+    fetchJournalists();
+  }, []);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log(formData);
-    };
+  const handleChange = (e) => {
+    const { name, value, type, files } = e.target;
+    if (type === 'file') {
+      setFormData({ ...formData, [name]: files[0] });
+    } else if (type === 'checkbox') {
+      setFormData({ ...formData, [name]: e.target.checked });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
+  };
 
-    return (
-        <div className="standard-container">
-            <form onSubmit={handleSubmit} className="standard-form-container">
-                <h2>Cadastro de Informações</h2>
-                <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-                    <Grid size={6}>
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await api.post("/api/internal/createProposal", {
+        formData
+      });
+      if (response && response.status === 200) {
+        navigate(`/Requests`)
+        alert("Pedido registrado com sucesso")
+      } else {
+        throw new Error("Não foi possivel registrar o pedido");
+      }
+    } catch (err) {
+      console.error("Failed to fetch journalists:", err);
+    }
+  };
+
+  const handleMultiSelectChange = (e) => {
+    const options = Array.from(e.target.selectedOptions, option => option.value);
+    setFormData({ ...formData, reviewers: options });
+  };
+
+  return (
+    <div className="standard-container">
+      <form onSubmit={handleSubmit} className="standard-form-container">
+        <h2>Cadastro de Informações</h2>
+        <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+          <Grid size={6}>
+            <div className="standard-input-group">
+              <label>Estado Civil:</label>
+              <input
+                type="text"
+                name="civilStatus"
+                value={formData.civilStatus}
+                onChange={handleChange}
+              />
+            </div>
+          </Grid>
+
+          <Grid size={6}>
+            <div className="standard-input-group">
+              <label>Gênero:</label>
+              <select
+                name="gender"
+                value={formData.gender}
+                onChange={handleChange}
+              >
+                <option value="masculino">Masculino</option>
+                <option value="feminino">Feminino</option>
+                <option value="indefinido">Indefinido</option>
+              </select>
+            </div>
+          </Grid>
+
+          <Grid size={6}>
+            <div className="standard-input-group">
+              <label>Usuário:</label>
+              <input
+                type="text"
+                name="username"
+                value={formData.username}
+                onChange={handleChange}
+              />
+            </div>
+          </Grid>
+
+          <Grid size={6}>
+            <div className="standard-input-group">
+              <label>Atualizado em:</label>
+              <input
+                type="date"
+                name="updatedAt"
+                value={formData.updatedAt}
+                onChange={handleChange}
+              />
+            </div>
+
+          </Grid>
+
+          <Grid size={6}>
+            <div className="standard-input-group">
+              <label>CPF:</label>
+              <input
+                type="text"
+                name="cpf"
+                value={formData.cpf}
+                onChange={handleChange}
+              />
+            </div>
+          </Grid>
+
+          <Grid size={6}>
+            <div className="standard-input-group">
+              <label>Criado em:</label>
+              <input
+                type="date"
+                name="createdAt"
+                value={formData.createdAt}
+                onChange={handleChange}
+              />
+            </div>
+          </Grid>
+
+          <Grid size={6}>
+            <div className="standard-input-group">
+              <label>Data de Nascimento:</label>
+              <input
+                type="date"
+                name="dateOfBirth"
+                value={formData.dateOfBirth}
+                onChange={handleChange}
+              />
+            </div>
+          </Grid>
+
+          <Grid size={6}>
+            <div className="standard-input-group">
+              <label>Nome:</label>
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+              />
+            </div>
+          </Grid>
+
+          <Grid size={6}>
+            <div className="standard-input-group">
+              <label>Nome de Guerra:</label>
+              <input
+                type="text"
+                name="warName"
+                value={formData.warName}
+                onChange={handleChange}
+              />
+            </div>
+          </Grid>
+          <Grid size={6}>
+            <div className="standard-input-group">
+              <label>Registro:</label>
+              <input
+                type="text"
+                name="registry"
+                value={formData.registry}
+                onChange={handleChange}
+              />
+            </div>
+          </Grid>
+
+          <Grid size={6}>
+            <div className="standard-input-group">
+              <label>Telefone:</label>
+              <input
+                type="text"
+                name="telephone"
+                value={formData.telephone}
+                onChange={handleChange}
+              />
+            </div>
+          </Grid>
+
+          <Grid size={6}>
                         <div className="standard-input-group">
-                            <label>Estado Civil:</label>
+                            <label>Email:</label>
                             <input
                                 type="text"
-                                name="estadoCivil"
-                                value={formData.estadoCivil}
+                                name="email"
+                                value={formData.email}
                                 onChange={handleChange}
                             />
                         </div>
                     </Grid>
 
-                    <Grid size={6}>
-                        <div className="standard-input-group">
-                            <label>Gênero:</label>
-                            <select
-                                name="genero"
-                                value={formData.genero}
-                                onChange={handleChange}
-                            >
-                                <option value="masculino">Masculino</option>
-                                <option value="feminino">Feminino</option>
-                                <option value="indefinido">Indefinido</option>
-                            </select>
-                        </div>
-                    </Grid>
-
-                    <Grid size={6}>
-                        <div className="standard-input-group">
-                            <label>Revisores:</label>
-                            <select
-                                multiple
-                                name="revisores"
-                                value={formData.revisores}
-                                onChange={handleMultiSelectChange}
-                            >
-                                <option value="revisor1">Revisor 1</option>
-                                <option value="revisor2">Revisor 2</option>
-                                <option value="revisor3">Revisor 3</option>
-                            </select>
-                        </div>
-                    </Grid>
-
-                    <Grid size={6}>
-                        <div className="standard-input-group">
-                            <label>Usuário:</label>
-                            <input
-                                type="text"
-                                name="usuario"
-                                value={formData.usuario}
-                                onChange={handleChange}
-                            />
-                        </div>
-
-                    </Grid>
-
-                    <Grid size={6}>
-                        <div className="standard-input-group">
-                            <label>Aprovado:</label>
-                            <input
-                                type="checkbox"
-                                name="aprovado"
-                                checked={formData.aprovado}
-                                onChange={handleChange}
-                            />
-                        </div>
-                    </Grid>
-
-                    <Grid size={6}>
-                        <div className="standard-input-group">
-                            <label>Atualizado em:</label>
-                            <input
-                                type="date"
-                                name="atualizadoEm"
-                                value={formData.atualizadoEm}
-                                onChange={handleChange}
-                            />
-                        </div>
-
-                    </Grid>
-
-                    <Grid size={6}>
-                        <div className="standard-input-group">
-                            <label>CPF:</label>
-                            <input
-                                type="text"
-                                name="cpf"
-                                value={formData.cpf}
-                                onChange={handleChange}
-                            />
-                        </div>
-                    </Grid>
-
-                    <Grid size={6}>
-                        <div className="standard-input-group">
-                            <label>Criado em:</label>
-                            <input
-                                type="date"
-                                name="criadoEm"
-                                value={formData.criadoEm}
-                                onChange={handleChange}
-                            />
-                        </div>
-                    </Grid>
-
-                    <Grid size={6}>
-                        <div className="standard-input-group">
-                            <label>Data de Nascimento:</label>
-                            <input
-                                type="date"
-                                name="dataNascimento"
-                                value={formData.dataNascimento}
-                                onChange={handleChange}
-                            />
-                        </div>
-                    </Grid>
-
-                    <Grid size={6}>
-                        <div className="standard-input-group">
-                            <label>Diploma:</label>
-                            <input
-                                type="file"
-                                name="diploma"
-                                accept="image/*"
-                                onChange={handleChange}
-                            />
-                        </div>
-                    </Grid>
-
-                    <Grid size={6}>
-                        <div className="standard-input-group">
-                            <label>Foto:</label>
-                            <input
-                                type="file"
-                                name="foto"
-                                accept="image/*"
-                                onChange={handleChange}
-                            />
-                        </div>
-                    </Grid>
-
-                    <Grid size={6}>
-                        <div className="standard-input-group">
-                            <label>Nome:</label>
-                            <input
-                                type="text"
-                                name="nome"
-                                value={formData.nome}
-                                onChange={handleChange}
-                            />
-                        </div>
-                    </Grid>
-
-                    <Grid size={6}>
-                        <div className="standard-input-group">
-                            <label>Nome de Guerra:</label>
-                            <input
-                                type="text"
-                                name="nomeGuerra"
-                                value={formData.nomeGuerra}
-                                onChange={handleChange}
-                            />
-                        </div>
-                    </Grid>
-                    <Grid size={6}>
-                        <div className="standard-input-group">
-                            <label>Registro:</label>
-                            <input
-                                type="text"
-                                name="registro"
-                                value={formData.registro}
-                                onChange={handleChange}
-                            />
-                        </div>
-                    </Grid>
-
-                    <Grid size={6}>
-                        <div className="standard-input-group">
-                            <label>Sobrenome:</label>
-                            <input
-                                type="text"
-                                name="sobrenome"
-                                value={formData.sobrenome}
-                                onChange={handleChange}
-                            />
-                        </div>
-                    </Grid>
-
-                    <Grid size={6}>
-                        <div className="standard-input-group">
-                            <label>Telefone:</label>
-                            <input
-                                type="text"
-                                name="telefone"
-                                value={formData.telefone}
-                                onChange={handleChange}
-                            />
-                        </div>
-                    </Grid>
-                </Grid>
-                <button type="submit" className="btn-submit">Enviar</button>
-            </form>
-        </div>
-    );
+          <div className="input-group">
+            <label>Motivo:</label>
+            <input
+              type="text"
+              name="reason"
+              value={formData.reason}
+              onChange={handleChange}
+            />
+          </div>
+        </Grid>
+        <button type="submit" className="btn-submit">Enviar</button>
+      </form>
+    </div>
+  );
 };
 
 export default UpdateAsset;

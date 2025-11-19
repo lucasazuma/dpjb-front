@@ -11,16 +11,22 @@ import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
 import { useNavigate } from "react-router-dom";
 import api from "../../api";
 import { useParams } from "react-router-dom";
+import { TranslateOperation } from "../../utils/methods";
+import {useAuth} from '../../context/auth-context'
 
 const RegisterAsset = () => {
   const navigate = useNavigate();
   const [rows, setRows] = useState([]);
+  const {user} = useAuth();
 
   useEffect(() => {
     const fetchJournalists = async () => {
       try {
-        const response = await api.get("/api/internal/getAllProposals");
+        console.log("hello 22")
+        console.log(user.username)
+        const response = await api.get(`/api/internal/getAllProposals/${user.username}`);
         const data = JSON.parse(response.data?.data);
+        console.log("data => ", data)
         setRows(data);
       } catch (err) {
         console.error("Failed to fetch journalists:", err);
@@ -28,7 +34,7 @@ const RegisterAsset = () => {
     };
 
     fetchJournalists();
-  }, []);
+  }, [user]);
 
 
   return (
@@ -39,7 +45,8 @@ const RegisterAsset = () => {
             <TableCell>Nome</TableCell>
             <TableCell align="center">Email</TableCell>
             <TableCell align="center">Nome de guerra</TableCell>
-            <TableCell align="center">Creado em</TableCell>
+            <TableCell align="center">Criado em</TableCell>
+            <TableCell align="center">Tipo</TableCell>
             <TableCell align="center">Aprovado por</TableCell>
           </TableRow>
         </TableHead>
@@ -55,9 +62,10 @@ const RegisterAsset = () => {
               <TableCell align="center">{row.email}</TableCell>
               <TableCell align="center">{row.warName}</TableCell>
               <TableCell align="center">{row.createdAt}</TableCell>
+              <TableCell align="center">{TranslateOperation(row.operation)}</TableCell>
               <TableCell align="center">{row.revisors?.join(", ")}</TableCell>
               <TableCell align="center">
-                <ArrowOutwardIcon onClick={() => navigate(`/ApproveRequest/${row.id}`)} />
+                <ArrowOutwardIcon onClick={() => navigate(`/ApproveRequest/${row.id}/${row.operation}`)} />
               </TableCell>
             </TableRow>
           ))}

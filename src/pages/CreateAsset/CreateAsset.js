@@ -28,7 +28,6 @@ const CreateAsset = () => {
 
     const handleSubmit = async () => {
         try {
-            console.log("hanlde submit #####")
             let data = JSON.parse(proposal)
             let response = await api.post(`/api/internal/createProposal`, {
                 name: data.name,

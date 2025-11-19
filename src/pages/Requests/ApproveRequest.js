@@ -8,15 +8,17 @@ import { useAuth } from "../../context/auth-context";
 import { useNavigate } from "react-router-dom";
 
 const ApproveRequest = () => {
-  const { id } = useParams();
+  const { id, operation } = useParams();
   const [proposal, setProposal] = useState({});
   const { user } = useAuth();
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchJournalists = async () => {
       try {
+        console.log("id => ", id)
         const response = await api.get(`/api/internal/getProposal/${id}`);
+        console.log("response => ", response)
         setProposal(JSON.parse(response.data?.data));
       } catch (err) {
         console.error("Failed to fetch journalists:", err);
@@ -156,6 +158,19 @@ const ApproveRequest = () => {
               </div>
             </Grid>
           </Grid>
+          <div
+            style={{
+              marginTop: "20px",
+              padding: "15px",
+              border: "1px solid #ccc",
+              borderRadius: "8px",
+              backgroundColor: "#f9f9f9",
+              fontSize: "14px",
+              color: "#333"
+            }}
+          >
+            <strong>Motivação:</strong> {proposal.reason}
+          </div>
           <div>
             <button style={{ backgroundColor: "green", borderRadius: "10px" }} onClick={() => handleApproval()}>
               Aprovar
