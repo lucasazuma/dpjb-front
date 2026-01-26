@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LoginPage from "./pages/Login/Login";
+import HomeScreen from "./pages/HomeScreen/HomeScreen";
 import AppBar from "./components/AppBar/AppBar";
 import RegisterAsset from "./pages/RegisterAsset/RegisterAsset";
 import AssetInfo from "./pages/AssetInfo/AssetInfo";
@@ -22,7 +23,8 @@ export default function App() {
       <Router>
         <AppBar />
         <Routes>
-          <Route path="/" element={<LoginPage />} />
+          <Route path="/" element={<HomeScreen />} />
+          <Route path="/Login" element={<LoginPage />} />
           <Route path="/RegisterAsset" element={<RegisterAsset />} />
           <Route path="/AssetInfo" element={<AssetInfo />} />
           <Route path="/QRcode" element={<QRcode />} />
@@ -33,9 +35,9 @@ export default function App() {
           <Route path="/SearchName" element={<LoginPage />} />
           <Route path="/ApproveRequest/:id/:operation" element={<ApproveRequest />} />
           <Route path="/CreateAsset/:id" element={<CreateAsset />} />
-           <Route path="/UpdateProposals" element={<UpdateProposals />} />
-           <Route path="/CreateDeletion/:id" element={<CreateDeletion />} />
-           <Route path="/SearchAsset" element={<ApiRequestPage />} />
+          <Route path="/UpdateProposals" element={<UpdateProposals />} />
+          <Route path="/CreateDeletion/:id" element={<CreateDeletion />} />
+          <Route path="/SearchAsset" element={<ApiRequestPage />} />
         </Routes>
       </Router>
     </AuthProvider>

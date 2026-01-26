@@ -10,7 +10,7 @@ const QRcode = () => {
         <>
             <div className='standard-container'>
                 <div className='standard-form-container'>
-                    <h1>QR Code Generator</h1>
+                    <h1>Visualizar Jornalista</h1>
                     {user && <QRCode value={user.name} />}
                 </div>
 

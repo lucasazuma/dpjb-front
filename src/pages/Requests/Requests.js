@@ -38,18 +38,20 @@ const RegisterAsset = () => {
 
 
   return (
-    <TableContainer component={Paper}>
-      <Table aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Nome</TableCell>
-            <TableCell align="center">Email</TableCell>
-            <TableCell align="center">Nome de guerra</TableCell>
-            <TableCell align="center">Criado em</TableCell>
-            <TableCell align="center">Tipo</TableCell>
-            <TableCell align="center">Aprovado por</TableCell>
-          </TableRow>
-        </TableHead>
+    <div className="table-container">
+      <TableContainer component={Paper}>
+        <Table aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Nome</TableCell>
+              <TableCell align="center">Email</TableCell>
+              <TableCell align="center">Nome de guerra</TableCell>
+              <TableCell align="center">Criado em</TableCell>
+              <TableCell align="center">Tipo</TableCell>
+              <TableCell align="center">Aprovado por</TableCell>
+              <TableCell align="center">Ações</TableCell>
+            </TableRow>
+          </TableHead>
         <TableBody>
           {rows?.map((row) => (
             <TableRow
@@ -72,6 +74,7 @@ const RegisterAsset = () => {
         </TableBody>
       </Table>
     </TableContainer>
+    </div>
   );
 };
 

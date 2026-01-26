@@ -17,33 +17,43 @@ import { useAuth } from '../../context/auth-context';
 
 
 function ResponsiveAppBar() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   let pages = []
   let links = []
+  console.log(user)
   if (user) {
     console.log("user -----------------", user)
     if (user.role === "elector") {
       console.log("elector")
-      pages = ['Login', 'Registrar Pedido', 'Pedidos', 'QRcode', 'Informação do usuário', 'Procura'];
-      links = ["/", "/RegisterAsset", '/Requests', '/QRcode', "/AssetInfo", "/SearchAsset"]
+      pages = ['Registrar Pedido', 'Pedidos', 'QRcode', 'Informação do usuário', 'Procura', 'Logout'];
+      links = ["/RegisterAsset", '/Requests', '/QRcode', "/AssetInfo", "/SearchAsset", "/"]
     } else {
       console.log("normal")
-      pages = ['Login', 'Informação do usuário', 'QRcode'];
-      links = ["/", "/AssetInfo", "/QRcode"]
+      pages = ['Informação do usuário', 'QRcode', 'Logout'];
+      links = ["/AssetInfo", "/QRcode", "/"]
     }
   } else {
     pages = ['Login',];
-    links = ["/"]
+    links = ["/Login"]
   }
 
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
+
   };
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
+  };
+
+  const handleMenuClick = (page, link) => {
+    if (page === 'Logout') {
+      logout();
+    } else {
+      handleCloseNavMenu();
+    }
   };
 
   return (
@@ -96,8 +106,8 @@ function ResponsiveAppBar() {
               sx={{ display: { xs: 'block', md: 'none' } }}
             >
               {pages.map((page, index) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Link to={links[index]}>{page}</Link>
+                <MenuItem key={page} onClick={() => handleMenuClick(page, links[index])}>
+                  {links[index] ? <Link to={links[index]}>{page}</Link> : <span onClick={() => logout()}>{page}</span>}
                 </MenuItem>
               ))}
             </Menu>
@@ -125,7 +135,7 @@ function ResponsiveAppBar() {
             {pages.map((page, index) => (
               <Button
                 key={page}
-                onClick={handleCloseNavMenu}
+                onClick={() => handleMenuClick(page, links[index])}
                 href={links[index]}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
