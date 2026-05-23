@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import '../standard.css';
 import Grid from '@mui/material/Grid2';
-import { electorUser } from '../../utils/mock';
 import { useParams, useNavigate } from "react-router-dom";
-import api from "../../api";
+import { Journalists, Proposals } from "../../api";
 
 const UpdateAsset = () => {
   const { id } = useParams();
@@ -27,16 +26,15 @@ const UpdateAsset = () => {
     telephone: '',
     operation: "Update",
     reason: "",
-    username: "",
     userId: "",
   });
   console.log(formData)
 
   useEffect(() => {
-    const fetchJournalists = async () => {
+    const fetchJournalist = async () => {
       try {
-        const response = await api.get(`/api/orjp/getJournalist/${id}`);
-        const data = JSON.parse(response.data.data);
+        const response = await Journalists.get(id);
+        const data = JSON.parse(response.data);
         setFormData({
           civilStatus: data.civilStatus || '',
           gender: data.gender || '',
@@ -59,8 +57,8 @@ const UpdateAsset = () => {
       }
     };
 
-    fetchJournalists();
-  }, []);
+    fetchJournalist();
+  }, [id]);
 
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
@@ -76,7 +74,7 @@ const UpdateAsset = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await api.post("/api/internal/createProposal", {
+      const response = await Proposals.createProposal({
         formData
       });
       if (response && response.status === 200) {
@@ -88,11 +86,6 @@ const UpdateAsset = () => {
     } catch (err) {
       console.error("Failed to fetch journalists:", err);
     }
-  };
-
-  const handleMultiSelectChange = (e) => {
-    const options = Array.from(e.target.selectedOptions, option => option.value);
-    setFormData({ ...formData, reviewers: options });
   };
 
   return (

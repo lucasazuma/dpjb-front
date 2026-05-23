@@ -9,26 +9,24 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
 import { useNavigate } from "react-router-dom";
-import api from "../../api";
-import { useParams } from "react-router-dom";
+import { UpdateProposals as UpdateProposalsAPI } from "../../api";
 
-const UpdateProposals = () => {
+const UpdateProposalsPage = () => {
   const navigate = useNavigate();
   const [rows, setRows] = useState([]);
 
   useEffect(() => {
-    const fetchJournalists = async () => {
+    const fetchUpdateProposals = async () => {
       try {
-        const response = await api.get("/api/updates/getUpdateProposals");
-        console.log("response", response)
-        const data = JSON.parse(response.data?.data);
+        const response = await UpdateProposalsAPI.getUpdateProposals();
+        const data = JSON.parse(response?.data);
         setRows(data);
       } catch (err) {
-        console.error("Failed to fetch journalists:", err);
+        console.error("Failed to fetch update proposals:", err);
       }
     };
 
-    fetchJournalists();
+    fetchUpdateProposals();
   }, []);
 
 
@@ -68,4 +66,4 @@ const UpdateProposals = () => {
   );
 };
 
-export default UpdateProposals;
+export default UpdateProposalsPage;

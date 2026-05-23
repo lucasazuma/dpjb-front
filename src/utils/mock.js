@@ -21,8 +21,8 @@ export const electorUser = () => {
 }
 
 export const regularUser = () => {
-    return { id: "1", email: "admin", 
-        name: "regular user", 
+    return { id: "1",
+        name: "regular user",
         role: "regular",
         civilStatus: "Single",
         gender: "Male",
@@ -37,6 +37,6 @@ export const regularUser = () => {
         warName: "John Doe",
         registry: "12345678901",
         email: "regularUser@example.com",
-        telephone: "12345678901" 
+        telephone: "12345678901"
     };
 }

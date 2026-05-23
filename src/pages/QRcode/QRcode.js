@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import QRCode from 'qrcode.react';
 import '../standard.css'
-import api from '../../api'
 import {useAuth} from '../../context/auth-context'
 const QRcode = () => {
    const {user} = useAuth();

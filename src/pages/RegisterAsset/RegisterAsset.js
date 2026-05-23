@@ -5,7 +5,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
-import api from "../../api";
+import { Proposals } from "../../api";
 import { useNavigate } from "react-router-dom";
 
 const RegisterAsset = () => {
@@ -39,15 +39,10 @@ const RegisterAsset = () => {
         }
     };
 
-    const handleMultiSelectChange = (e) => {
-        const options = Array.from(e.target.selectedOptions, option => option.value);
-        setFormData({ ...formData, revisores: options });
-    };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await api.post("/api/internal/createProposal", {
+            const response = await Proposals.createProposal({
                 formData
             });
             if (response && response.status === 200) {

@@ -1,19 +1,46 @@
-import React, { useState, useEffect } from 'react';
-import '../standard.css'
-import Grid from '@mui/material/Grid2';
-import { useSelector, useDispatch } from 'react-redux'
-import api from '../../api'
-import { electorUser } from '../../utils/mock'
+import React, { useState, useEffect } from "react";
+import "../standard.css";
+import Grid from "@mui/material/Grid2";
+import { useParams } from "react-router-dom";
+import { Journalists } from "../../api";
 
 const UserInfo = () => {
-  const data = electorUser();
+  const { cpf } = useParams();
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchJournalist = async () => {
+      try {
+        const response = await Journalists.getByCpf(cpf);
+        const fetchedData = JSON.parse(response?.data);
+        setData(fetchedData);
+      } catch (err) {
+        console.error("Failed to fetch journalist:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (cpf) {
+      fetchJournalist();
+    }
+  }, [cpf]);
+
+  if (loading) return <div className="standard-container">Carregando...</div>;
+  if (!data)
+    return <div className="standard-container">Nenhum dado encontrado</div>;
 
   return (
     <>
       <div className="standard-container">
         <div className="standard-form-container">
           <h2>Dados Cadastrados</h2>
-          <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+          <Grid
+            container
+            rowSpacing={1}
+            columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+          >
             <Grid size={6}>
               <div className="standard-input-group">
                 <label>Estado Civil:</label> {data.civilStatus}
@@ -28,7 +55,7 @@ const UserInfo = () => {
 
             <Grid size={6}>
               <div className="standard-input-group">
-                <label>Revisores:</label> {data.revisors.join(', ')}
+                <label>Revisores:</label> {data.revisors.join(", ")}
               </div>
             </Grid>
 
@@ -40,7 +67,7 @@ const UserInfo = () => {
 
             <Grid size={6}>
               <div className="standard-input-group">
-                <label>Aprovado:</label> {data.approved ? 'Sim' : 'Não'}
+                <label>Aprovado:</label> {data.approved ? "Sim" : "Não"}
               </div>
             </Grid>
 
@@ -70,13 +97,15 @@ const UserInfo = () => {
 
             <Grid size={6}>
               <div className="standard-input-group">
-                <label>Diploma:</label> <img src={data.diplome} alt="Diploma" className="imagem" />
+                <label>Diploma:</label>{" "}
+                <img src={data.diplome} alt="Diploma" className="imagem" />
               </div>
             </Grid>
 
             <Grid size={6}>
               <div className="standard-input-group">
-                <label>Foto:</label> <img src={data.photo} alt="Foto" className="imagem" />
+                <label>Foto:</label>{" "}
+                <img src={data.photo} alt="Foto" className="imagem" />
               </div>
             </Grid>
 

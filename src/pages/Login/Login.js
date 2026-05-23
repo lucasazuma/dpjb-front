@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import "../standard.css"; // Import standard CSS
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/auth-context";
-import api from "../../api";
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");

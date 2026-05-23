@@ -1,36 +1,33 @@
 import React, { useState, useEffect } from "react";
 import "../standard.css";
 import Grid from "@mui/material/Grid2";
-import api from "../../api";
+import { Proposals } from "../../api";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../../context/auth-context";
 import { useNavigate } from "react-router-dom";
 
 const ApproveRequest = () => {
-  const { id, operation } = useParams();
+  const { id } = useParams();
   const [proposal, setProposal] = useState({});
   const { user } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchJournalists = async () => {
+    const fetchProposal = async () => {
       try {
-        console.log("id => ", id)
-        const response = await api.get(`/api/internal/getProposal/${id}`);
-        console.log("response => ", response)
-        setProposal(JSON.parse(response.data?.data));
+        const response = await Proposals.getProposal(id);
+        setProposal(JSON.parse(response?.data));
       } catch (err) {
-        console.error("Failed to fetch journalists:", err);
+        console.error("Failed to fetch proposal:", err);
       }
     };
 
-    fetchJournalists();
-  }, []);
+    fetchProposal();
+  }, [id]);
 
   const handleApproval = async () => {
     try {
-      console.log("hello ")
-      const response = await api.post("/api/internal/approveProposal", {
+      const response = await Proposals.approveProposal({
         id: id,
         approved: true,
         revisor: user.username
@@ -48,7 +45,7 @@ const ApproveRequest = () => {
 
   const handleRejection = async () => {
     try {
-      const response = await api.post("/api/internal/deleteProposal", {
+      const response = await Proposals.deleteProposal({
         id: proposal.id,
       });
       if (response && response.status === 200) {

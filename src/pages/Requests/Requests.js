@@ -9,8 +9,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
 import { useNavigate } from "react-router-dom";
-import api from "../../api";
-import { useParams } from "react-router-dom";
+import { Proposals } from "../../api";
 import { TranslateOperation } from "../../utils/methods";
 import {useAuth} from '../../context/auth-context'
 
@@ -20,20 +19,17 @@ const RegisterAsset = () => {
   const {user} = useAuth();
 
   useEffect(() => {
-    const fetchJournalists = async () => {
+    const fetchProposals = async () => {
       try {
-        console.log("hello 22")
-        console.log(user.username)
-        const response = await api.get(`/api/internal/getAllProposals/${user.username}`);
-        const data = JSON.parse(response.data?.data);
-        console.log("data => ", data)
+        const response = await Proposals.getAllProposals(user.username);
+        const data = JSON.parse(response?.data);
         setRows(data);
       } catch (err) {
-        console.error("Failed to fetch journalists:", err);
+        console.error("Failed to fetch proposals:", err);
       }
     };
 
-    fetchJournalists();
+    fetchProposals();
   }, [user]);
 
 

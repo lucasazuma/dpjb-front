@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import '../standard.css'
 import Grid from '@mui/material/Grid2';
-import { useSelector, useDispatch } from 'react-redux'
-import api from '../../api'
-import { electorUser } from '../../utils/mock'
+import { Journalists, Proposals } from '../../api'
 import { useParams, useNavigate } from "react-router-dom";
 
 
 const UserInfo = () => {
-  const data = electorUser();
   const { id } = useParams();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -30,14 +27,13 @@ const UserInfo = () => {
     telephone: '',
     operation: "Deletion",
     reason: "",
-    username: "",
     userId: "",
   });
 
   useEffect(() => {
-    const fetchJournalists = async () => {
+    const fetchJournalist = async () => {
       try {
-        const response = await api.get(`/api/orjp/getJournalist/${id}`);
+        const response = await Journalists.get(id);
         const data = JSON.parse(response.data.data);
         setFormData({
           civilStatus: data.civilStatus || '',
@@ -61,12 +57,12 @@ const UserInfo = () => {
       }
     };
 
-    fetchJournalists();
-  }, []);
+    fetchJournalist();
+  }, [id]);
 
   const handleSubmit = async (e) => {
     try {
-      const response = await api.post("/api/internal/createProposal", {
+      const response = await Proposals.createProposal({
         formData
       });
       if (response && response.status === 200) {

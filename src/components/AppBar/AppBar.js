@@ -1,70 +1,39 @@
 import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
+import { AppBar as MuiAppBar, Box, Toolbar, IconButton, Container, Menu, Typography } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
-import Button from '@mui/material/Button';
-import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
-import { Link } from "react-router-dom";
-import { useSelector, useDispatch } from 'react-redux'
 import { useAuth } from '../../context/auth-context';
+import { useNavbarMenu } from '../../hooks/useNavbarMenu';
+import { BRAND_NAME } from '../../config/navbarConfig';
+import { DesktopMenuItem, MobileMenuItem } from './MenuItems';
 
-
-
-function ResponsiveAppBar() {
+function AppBar() {
   const { user, logout } = useAuth();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
-  let pages = []
-  let links = []
-  console.log(user)
-  if (user) {
-    console.log("user -----------------", user)
-    if (user.role === "elector") {
-      console.log("elector")
-      pages = ['Registrar Pedido', 'Pedidos', 'QRcode', 'Informação do usuário', 'Procura', 'Logout'];
-      links = ["/RegisterAsset", '/Requests', '/QRcode', "/AssetInfo", "/SearchAsset", "/"]
-    } else {
-      console.log("normal")
-      pages = ['Informação do usuário', 'QRcode', 'Logout'];
-      links = ["/AssetInfo", "/QRcode", "/"]
-    }
-  } else {
-    pages = ['Login',];
-    links = ["/Login"]
-  }
-
+  const menuItems = useNavbarMenu(user);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
-
   };
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
 
-  const handleMenuClick = (page, link) => {
-    if (page === 'Logout') {
+  const handleMenuItemClick = (item) => {
+    if (item.action === 'logout') {
       logout();
-    } else {
-      handleCloseNavMenu();
     }
   };
 
   return (
-    <AppBar>
+    <MuiAppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
+          {/* Desktop Logo */}
           <Typography
             variant="h6"
             noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
@@ -75,13 +44,14 @@ function ResponsiveAppBar() {
               textDecoration: 'none',
             }}
           >
-            DPJB
+            {BRAND_NAME}
           </Typography>
 
+          {/* Mobile Menu */}
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
-              aria-label="account of current user"
+              aria-label="open navigation menu"
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
@@ -92,32 +62,29 @@ function ResponsiveAppBar() {
             <Menu
               id="menu-appbar"
               anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-              }}
+              anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
               keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
+              transformOrigin={{ vertical: 'top', horizontal: 'left' }}
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
               sx={{ display: { xs: 'block', md: 'none' } }}
             >
-              {pages.map((page, index) => (
-                <MenuItem key={page} onClick={() => handleMenuClick(page, links[index])}>
-                  {links[index] ? <Link to={links[index]}>{page}</Link> : <span onClick={() => logout()}>{page}</span>}
-                </MenuItem>
+              {menuItems.map((item) => (
+                <MobileMenuItem
+                  key={item.label}
+                  item={item}
+                  onClick={handleMenuItemClick}
+                  onClose={handleCloseNavMenu}
+                />
               ))}
             </Menu>
           </Box>
+
+          {/* Mobile Logo */}
           <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
           <Typography
             variant="h5"
             noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
             sx={{
               mr: 2,
               display: { xs: 'flex', md: 'none' },
@@ -129,23 +96,23 @@ function ResponsiveAppBar() {
               textDecoration: 'none',
             }}
           >
-            DPJB
+            {BRAND_NAME}
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page, index) => (
-              <Button
-                key={page}
-                onClick={() => handleMenuClick(page, links[index])}
-                href={links[index]}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                {page}
-              </Button>
+
+          {/* Desktop Menu */}
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, justifyContent: 'flex-end' }}>
+            {menuItems.map((item) => (
+              <DesktopMenuItem
+                key={item.label}
+                item={item}
+                onClick={handleMenuItemClick}
+              />
             ))}
           </Box>
         </Toolbar>
       </Container>
-    </AppBar>
+    </MuiAppBar>
   );
 }
-export default ResponsiveAppBar;
+
+export default AppBar;

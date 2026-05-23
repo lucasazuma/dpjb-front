@@ -10,7 +10,7 @@ import UpdateAsset from "./pages/UpdateAsset/UpdateAsset";
 import Requests from "./pages/Requests/Requests";
 import ApproveRequest from "./pages/Requests/ApproveRequest";
 import CreateAsset from "./pages/CreateAsset/CreateAsset";
-import UpdateProposals from "./pages/Requests/UpdateRequests";
+import UpdateProposalsPage from "./pages/Requests/UpdateRequests";
 import CreateDeletion from "./pages/CreateDeletion/CreateDeletion";
 import ApiRequestPage from "./pages/ApiRequestPage/ApiRequestPage";
 import { AuthProvider } from "./context/auth-context"; // 👈 import the context
@@ -26,7 +26,7 @@ export default function App() {
           <Route path="/" element={<HomeScreen />} />
           <Route path="/Login" element={<LoginPage />} />
           <Route path="/RegisterAsset" element={<RegisterAsset />} />
-          <Route path="/AssetInfo" element={<AssetInfo />} />
+          <Route path="/AssetInfo/:cpf" element={<AssetInfo />} />
           <Route path="/QRcode" element={<QRcode />} />
           <Route path="/UpdateAsset/:id" element={<UpdateAsset />} />
           <Route path="/Requests" element={<Requests />} />
@@ -35,7 +35,7 @@ export default function App() {
           <Route path="/SearchName" element={<LoginPage />} />
           <Route path="/ApproveRequest/:id/:operation" element={<ApproveRequest />} />
           <Route path="/CreateAsset/:id" element={<CreateAsset />} />
-          <Route path="/UpdateProposals" element={<UpdateProposals />} />
+          <Route path="/UpdateProposals" element={<UpdateProposalsPage />} />
           <Route path="/CreateDeletion/:id" element={<CreateDeletion />} />
           <Route path="/SearchAsset" element={<ApiRequestPage />} />
         </Routes>

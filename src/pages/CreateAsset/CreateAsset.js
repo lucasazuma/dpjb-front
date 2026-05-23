@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import "../standard.css"; // Import standard CSS
+import "../standard.css";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/auth-context";
-import api from "../../api";
+import { Proposals, Journalists } from "../../api";
 import { useParams } from "react-router-dom";
 
 const CreateAsset = () => {
@@ -14,23 +13,22 @@ const CreateAsset = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchJournalists = async () => {
+        const fetchProposal = async () => {
             try {
-                const response = await api.get(`/api/internal/getProposal/${id}`);
-                setProposal(response.data.data)
-                console.log("response => ", response)
+                const response = await Proposals.getProposal(id);
+                setProposal(response.data);
             } catch (err) {
-                console.error("Failed to fetch journalists:", err);
+                console.error("Failed to fetch proposal:", err);
             }
         };
 
-        fetchJournalists();
-    }, []);
+        fetchProposal();
+    }, [id]);
 
     const handleSubmit = async () => {
         try {
-            let data = JSON.parse(proposal)
-            let response = await api.post(`/api/orjp/createJournalist`, {
+            let data = JSON.parse(proposal);
+            let response = await Journalists.createJournalist({
                 name: data.name,
                 warName: data.warName,
                 telephone: data.telephone,
